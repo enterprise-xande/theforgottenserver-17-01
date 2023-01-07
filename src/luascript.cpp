@@ -7159,6 +7159,19 @@ int LuaScriptInterface::luaCreatureIsInGhostMode(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaCreatureIsInStealthMode(lua_State* L)
+{
+	// creature:isInStealthMode()
+	const Creature* creature = getUserdata<const Creature>(L, 1);
+	if (creature) {
+		pushBoolean(L, creature->isInStealthMode());
+	}
+	else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int LuaScriptInterface::luaCreatureIsHealthHidden(lua_State* L)
 {
 	// creature:isHealthHidden()
@@ -9948,6 +9961,65 @@ int LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 		}
 		IOLoginData::updateOnlineStatus(player->getGUID(), false);
 	} else {
+		for (const auto& it : g_game.getPlayers()) {
+			if (!it.second->isAccessPlayer()) {
+				it.second->notifyStatusChange(player, VIPSTATUS_ONLINE);
+			}
+		}
+		IOLoginData::updateOnlineStatus(player->getGUID(), true);
+	}
+	pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerSetStealthMode(lua_State* L)
+{
+	// player:setStealthMode(enabled[, showEffect=true])
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	bool enabled = getBoolean(L, 2);
+	if (player->isInStealthMode() == enabled) {
+		pushBoolean(L, true);
+		return 1;
+	}
+
+	bool showEffect = getBoolean(L, 3, true);
+
+	player->switchStealthMode();
+
+	Tile* tile = player->getTile();
+	const Position& position = player->getPosition();
+
+	SpectatorVec spectators;
+	g_game.map.getSpectators(spectators, position, true, true);
+	for (Creature* spectator : spectators) {
+		Player* tmpPlayer = spectator->getPlayer();
+		if (tmpPlayer != player && !tmpPlayer->isAccessPlayer()) {
+			if (enabled) {
+				tmpPlayer->sendRemoveTileCreature(player, position, tile->getClientIndexOfCreature(tmpPlayer, player));
+			}
+			else {
+				tmpPlayer->sendCreatureAppear(player, position, showEffect);
+			}
+		}
+		else {
+			tmpPlayer->sendCreatureChangeVisible(player, !enabled);
+		}
+	}
+
+	if (player->isInStealthMode()) {
+		for (const auto& it : g_game.getPlayers()) {
+			if (!it.second->isAccessPlayer()) {
+				it.second->notifyStatusChange(player, VIPSTATUS_OFFLINE);
+			}
+		}
+		IOLoginData::updateOnlineStatus(player->getGUID(), false);
+	}
+	else {
 		for (const auto& it : g_game.getPlayers()) {
 			if (!it.second->isAccessPlayer()) {
 				it.second->notifyStatusChange(player, VIPSTATUS_ONLINE);

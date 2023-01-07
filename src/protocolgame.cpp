@@ -2865,7 +2865,7 @@ void ProtocolGame::sendVIPEntries()
 
 		Player* vipPlayer = g_game.getPlayerByGUID(entry.guid);
 
-		if (!vipPlayer || vipPlayer->isInGhostMode() || player->isAccessPlayer()) {
+		if (!vipPlayer || vipPlayer->isInGhostMode() || player->isAccessPlayer() || vipPlayer->isInStealthMode()) {
 			vipStatus = VIPSTATUS_OFFLINE;
 		}
 
@@ -2952,6 +2952,13 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 		AddOutfit(msg, outfit);
 	}
 
+	if (!creature->isInStealthMode() && !creature->isInvisible()) {
+		AddOutfit(msg, creature->getCurrentOutfit());
+	}
+	else {
+		static Outfit_t outfit;
+		AddOutfit(msg, outfit);
+	}
 	LightInfo lightInfo = creature->getCreatureLight();
 	msg.addByte(player->isAccessPlayer() ? 0xFF : lightInfo.level);
 	msg.addByte(lightInfo.color);

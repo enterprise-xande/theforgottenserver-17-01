@@ -20,8 +20,8 @@
 #include "otpch.h"
 
 #include <algorithm>
-#include <lua.hpp>
-
+//#include <lua.hpp>
+#include "luajit/lua.hpp"
 #include "configmanager.h"
 #include "game.h"
 #include "pugicast.h"

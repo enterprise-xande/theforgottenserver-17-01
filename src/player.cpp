@@ -691,6 +691,9 @@ bool Player::canSeeCreature(const Creature* creature) const
 	if (creature->isInGhostMode() && !group->access) {
 		return false;
 	}
+	if (creature->isInStealthMode() && !group->access) {
+		return false;
+	}
 
 	if (!creature->getPlayer() && !canSeeInvisibility() && creature->isInvisible()) {
 		return false;

@@ -801,4 +801,19 @@
 	<instant name="pirate corsair skill reducer" words="###49" direction="1" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/pirate_corsair_skill_reducer.lua" />
 	<instant name="monster soulfire" words="###50" aggressive="1" blockwalls="1" range="7" needtarget="1" needlearn="1" script="monster/monster_soulfire.lua" />
 	<instant name="dipthrah skill reducer" words="###51" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/dipthrah_skill_reducer.lua" />
-</spells>
+
+	
+		<instant group="support" spellid="45" name="Camouflage" words="stealth" level="8" mana="15" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="support/stealth.lua">
+		<vocation name="Sorcerer" />
+		<vocation name="Druid" />
+		<vocation name="Master Sorcerer" />
+		<vocation name="Elder Druid" />
+		<vocation name="Paladin" />
+		<vocation name="Royal Paladin" />
+		<vocation name="Knight" />
+		<vocation name="Elite Knight" />
+	</instant>
+	
+	
+	
+	</spells>

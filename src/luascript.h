@@ -20,7 +20,8 @@
 #ifndef FS_LUASCRIPT_H_5344B2BC907E46E3943EA78574A212D8
 #define FS_LUASCRIPT_H_5344B2BC907E46E3943EA78574A212D8
 
-#include <lua.hpp>
+//#include <lua.hpp>
+#include "luajit/lua.hpp"
 
 #if LUA_VERSION_NUM >= 502
 #ifndef LUA_COMPAT_ALL
@@ -764,6 +765,7 @@ class LuaScriptInterface
 		static int luaCreatureIsRemoved(lua_State* L);
 		static int luaCreatureIsCreature(lua_State* L);
 		static int luaCreatureIsInGhostMode(lua_State* L);
+		static int luaCreatureIsInStealthMode(lua_State* L);
 		static int luaCreatureIsHealthHidden(lua_State* L);
 		static int luaCreatureIsMovementBlocked(lua_State* L);
 		static int luaCreatureIsImmune(lua_State* L);
@@ -991,6 +993,7 @@ class LuaScriptInterface
 		static int luaPlayerSetEditHouse(lua_State* L);
 
 		static int luaPlayerSetGhostMode(lua_State* L);
+		static int luaPlayerSetStealthMode(lua_State* L);
 
 		static int luaPlayerGetContainerId(lua_State* L);
 		static int luaPlayerGetContainerById(lua_State* L);

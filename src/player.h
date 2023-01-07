@@ -375,8 +375,14 @@ class Player final : public Creature, public Cylinder
 		bool isInGhostMode() const override {
 			return ghostMode;
 		}
+		bool isInStealthMode() const override {
+			return stealthMode;
+		}
 		void switchGhostMode() {
 			ghostMode = !ghostMode;
+		}
+		void switchStealthMode() {
+			stealthMode = !stealthMode;
 		}
 
 		uint32_t getAccount() const {
@@ -1312,6 +1318,7 @@ class Player final : public Creature, public Cylinder
 		bool inMarket = false;
 		bool wasMounted = false;
 		bool ghostMode = false;
+		bool stealthMode = false;
 		bool pzLocked = false;
 		bool isConnecting = false;
 		bool addAttackSkillPoint = false;
